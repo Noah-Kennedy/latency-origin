@@ -113,7 +113,11 @@ async fn serve_connection(
         .serve_connection(
             TokioIo::new(tls),
             service_fn(|_req| {
-                let body = ChunkedDelayBody::new(5, Duration::from_secs_f32(args.chunk_delay), 256);
+                let body = ChunkedDelayBody::new(
+                    args.num_chunks,
+                    Duration::from_secs_f32(args.chunk_delay),
+                    args.chunk_size,
+                );
 
                 async move {
                     tokio::time::sleep(sleep_duration).await;
